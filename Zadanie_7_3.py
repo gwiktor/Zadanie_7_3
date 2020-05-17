@@ -13,11 +13,8 @@ class BaseContact:
         return f"{self.name} {self.last_name} {self.phone_number} {self.e_mail}"
 
     def contact(self):
-        for self in base_cards:
-            return f"Wybieram numer +48 {self.phone_number} i dzwonię do {self.name} {self.last_name}"
-        for self in business_cards:
-            return f"Wybieram numer +48 {self.business_number} i dzwonię do {self.name} {self.last_name}"
-    
+        return f"Wybieram numer +48 {self.phone_number} i dzwonię do {self.name} {self.last_name}"
+
     @property
     def label_length(self):
         imie = len(self.name)
@@ -25,38 +22,44 @@ class BaseContact:
         return f"{imie} {nazwisko}"
 
 class BusinessContact(BaseContact):
-    def __init__(self, job, company, business_phone, *args, **kwargs):
+    def __init__(self, job, company, business_number, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.job = job
         self.company = company
-        self.business_phone = business_phone
+        self.business_number = business_number
+    
+    def contact(self):
+        return f"Wybieram numer +48 {self.business_number} i dzwonię do {self.name} {self.last_name}"
 
-    base_cards = []
-    business_cards = []
+base_cards = []
+business_cards = []
 
-    def create_contacts(quantity, choice):
-        base_cards = []
-        business_cards = []
-        for a in range(quantity):
-            i = fake_data.name()
-            j = fake_data.safe_email()
-            k = i.split()
-            m = fake_data.msisdn()
+def create_contacts(choice, quantity):
+    for a in range(quantity):
+        i = fake_data.name()
+        j = fake_data.safe_email()
+        k = i.split()
+        m = fake_data.msisdn()
+        if choice == "BaseContact":
+            base_cards.append(BaseContact(name = k[0], last_name = k[1], phone_number = m, e_mail = j))
+        elif choice == "BusinessContact":
             n = fake_data.job()
             p = fake_data.company()
-            r = fake_data.msisdn()
-            if choice == 1:
-                base_cards.append(BaseContact(k[0], k[1], m, j))
-                print(base_cards)
-            elif choice == 2:
-                business_cards.append(BusinessContact(k[0], k[1], m, j, n, p, r))
-                print(business_cards)
-quantity = int(input("Ile chcesz wizytówek?"))
-choice = int(input("Jakie chcesz wizytówki?"))
+            r = fake_data.phone_number()
+            business_cards.append(BusinessContact(name = k[0], last_name = k[1], phone_number = m, e_mail = j, job = n, company = p, business_number = r))
 
 
-'''
-base_cards.append(BaseContact(k[0], k[1], m, j))
-business_cards.append(BusinessContact(k[0], k[1], m, j, n, p, r))
-'''
+#Sprawdzenie
+create_contacts("BaseContact", 10)
+for i in base_cards:
+    print(i)
 
+create_contacts("BusinessContact", 3)
+for i in business_cards:
+    print(i)
+
+print(base_cards[5].contact())
+print(base_cards[5].label_length)
+
+print(business_cards[1].contact())
+print(business_cards[1].label_length)
