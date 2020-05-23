@@ -23,7 +23,7 @@ class BaseContact:
     def label_length(self):
         imie = len(self.name)
         nazwisko = len(self.last_name)
-        return f"{imie} {nazwisko}"
+        return f"LIczba liter w imieniu: {imie}, liczba liter w nazwisku: {nazwisko}"
 
 #Zdefiniowanie sub-klasy BusinessContact
 class BusinessContact(BaseContact):
@@ -102,12 +102,12 @@ def length():
     if a == "base cards":
         for i in base_cards:
             if b == str(i.name):
-                print(i.label_length())
+                print(i.label_length)
         
     elif a == "business cards":
         for i in business_cards:
             if b == str(i.name):
-                print(i.label_length())
+                print(i.label_length)
 
 
 #Dostępne komendy do wywołania
