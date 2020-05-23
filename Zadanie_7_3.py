@@ -5,6 +5,7 @@ fake_data = Faker()
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 
+#Zdefiniowanie klasy BaseContact
 class BaseContact:
     def __init__(self, name, last_name, phone_number, e_mail):
         self.name = name
@@ -24,6 +25,7 @@ class BaseContact:
         nazwisko = len(self.last_name)
         return f"{imie} {nazwisko}"
 
+#Zdefiniowanie sub-klasy BusinessContact
 class BusinessContact(BaseContact):
     def __init__(self, job, company, business_number, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,57 +39,109 @@ class BusinessContact(BaseContact):
     def contact(self):
         return f"Wybieram numer +48 {self.business_number} i dzwonię do {self.name} {self.last_name}"
 
+#Zdefiniowanie list do tworzenia list wizytówek
 base_cards = []
 business_cards = []
 
+#Tworzenie listy kontaktów do list wizytówek
 def create_contacts(choice, quantity):
+    
     for a in range(quantity):
         i = fake_data.name()
         j = fake_data.safe_email()
         k = i.split()
         m = fake_data.msisdn()
-        if choice == "BaseContact":
+        if choice == BaseContact:
             base_cards.append(BaseContact(name = k[0], last_name = k[1], phone_number = m, e_mail = j))
-            for x in base_cards:
-                logging.debug(x)
-        elif choice == "BusinessContact":
+        elif choice == BusinessContact:
             n = fake_data.job()
             p = fake_data.company()
             r = fake_data.phone_number()
             business_cards.append(BusinessContact(name = k[0], last_name = k[1], phone_number = m, e_mail = j, job = n, company = p, business_number = r))
-            for x in business_cards:
-                logging.debug(x)
 
-#Sprawdzenie
+#Funkcja pomagająca okreslić co można wykonać
+def print_help():
+    print("""Poniżej lista czynności, które możesz wykonać wpisując odpowiednią komendę:
+    stwórz base cards - tworzenie wizytówek z podstawowymi danymi
+    stwórz business cards - tworzenie wizytówek biznesowych
+    pokaż - wylistowanie wszystkich wizytówek danej grupy wizytówek
+    zadzwoń - wybranie telefonu do wybranej osoby
+    długość - sprawdzenie długości imienia i nazwiska danej osoby
+    zamknij - zamknięcie programu""")
+
+#Funkcja przedstawiająca listę wizytówek
+def show(a):
+    if a == "base cards":
+        for i in base_cards:
+            print(i)
+        
+    elif a == "business cards":
+        for i in business_cards:
+            print(i)
+
+#Funkcja wywołująca funkcję klasy "contact" z określonej listy izytówek        
+def call():
+    a = input("Z której listy wizytówek chcesz zadzownić? \n base cards \n business cards \n")
+    show(a)
+    b = input("Wpisz imię osoby, do której chcesz zadzownić ")
+    if a == "base cards":
+        for i in base_cards:
+            if b == str(i.name):
+                print(i.contact())
+        
+    elif a == "business cards":
+        for i in business_cards:
+            if b == str(i.name):
+                print(i.contact())
+
+#Funkcja wywołująca funkcję klasy "label_length" z określonej listy wizytówek
+def length():
+    a = input("Z której listy wizytówek chcesz sprawdzić długość imienia i nazwiska? \n base cards \n business cards \n")
+    show(a)
+    b = input("Wpisz imię osoby, której chcesz sprawdzić długość imienia i nazwiska ")
+    if a == "base cards":
+        for i in base_cards:
+            if b == str(i.name):
+                print(i.label_length())
+        
+    elif a == "business cards":
+        for i in business_cards:
+            if b == str(i.name):
+                print(i.label_length())
+
+
+#Dostępne komendy do wywołania
+def task():
+    task1 = input("Co chcesz wykonać?")
+    if task1 == "pomoc":
+        print_help()
+        task()
+    elif task1 == "stwórz base cards":
+        a = int(input("Ile randomowych wizytówek chcesz stworzyć? "))
+        create_contacts(BaseContact, a)
+        task()
+    elif task1 == "stwórz business cards":
+        a = int(input("Ile randomowych wizytówek chcesz stworzyć? "))
+        create_contacts(BusinessContact, a)
+        task()
+    elif task1 == "pokaż":
+        a = input("Które wizytówki chciałbyś zobaczyć? \n base cards \n business cards \n")
+        show(a)
+        task()
+    elif task1 == "zadzwoń":
+        call()
+        task()
+    elif task1 == "długość":
+        length()
+        task()   
+    elif task1 == "zamknij":
+        print("Narazie")
+    else:
+        print("Nie ma takiego polecenia. Sprawdz za pomocą komendy 'pomoc' co możesz zrobić")
+        task()
+        
+#Uruchomienie programu
 if __name__ == "__main__":
-    
-    #Choose which adress book you want to create by variable "choice and choose how many elements you need by variable "quantity"
-    choice = input("Napisz jaką książkę adresową chcesz stworzyć, posługjąc się odpowiednim określeniem: \n1 - BaseContact \n2 - BusinessContact")
-    quantity = int(input("Podaj liczbę kontaktów, które chcesz utworzyć: "))
-    logging.debug(f"Została wybrana książka adresowa {choice} z {quantity} kontaktami")
-    logging.debug(create_contacts(choice, quantity))
-    
-    #Choose who you want to call and whose length of name and last name you want to know by variable "call"
-    call = int(input(f"Z którym numerem chcesz się połączyć i chcesz poznać długość imienia i nazwiska? Wybierz numer od 0 do {quantity}"))
-    if choice == "BaseContact":
-        logging.debug(base_cards[call].contact)
-        logging.debug(base_cards[call].label_length)
-    elif choice == "BusinessContact":
-        logging.debug(business_cards[call].contact)
-        logging.debug(business_cards[call].label_length)
+    print("Witam w moim programie! Chcesz się dowiedzieć co potrafię? Wpisz 'pomoc', aby dowiedzieć się więcej")
+    task()
 
-'''
-create_contacts("BaseContact", 10)
-for i in base_cards:
-    print(i)
-
-create_contacts("BusinessContact", 3)
-for i in business_cards:
-    print(i)
-
-print(base_cards[5].contact())
-print(base_cards[5].label_length)
-
-print(business_cards[1].contact())
-print(business_cards[1].label_length)
-'''
