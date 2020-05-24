@@ -112,30 +112,30 @@ def length():
 
 #Dostępne komendy do wywołania
 def task():
-    task1 = input("Co chcesz wykonać?")
-    if task1 == "pomoc":
-        print_help()
-    elif task1 == "stwórz base cards":
-        a = int(input("Ile randomowych wizytówek chcesz stworzyć? "))
-        create_contacts(BaseContact, a)
-    elif task1 == "stwórz business cards":
-        a = int(input("Ile randomowych wizytówek chcesz stworzyć? "))
-        create_contacts(BusinessContact, a)
-    elif task1 == "pokaż":
-        a = input("Które wizytówki chciałbyś zobaczyć? \n base cards \n business cards \n")
-        show(a)
-    elif task1 == "zadzwoń":
-        call()
-    elif task1 == "długość":
-        length()  
-    elif task1 == "zamknij":
-        print("Narazie")
-    else:
-        print("Nie ma takiego polecenia. Sprawdz za pomocą komendy 'pomoc' co możesz zrobić")
+    while True:
+        task1 = input("Co chcesz wykonać?")
+        if task1 == "pomoc":
+            print_help()
+        elif task1 == "stwórz base cards":
+            a = int(input("Ile randomowych wizytówek chcesz stworzyć? "))
+            create_contacts(BaseContact, a)
+        elif task1 == "stwórz business cards":
+            a = int(input("Ile randomowych wizytówek chcesz stworzyć? "))
+            create_contacts(BusinessContact, a)
+        elif task1 == "pokaż":
+            a = input("Które wizytówki chciałbyś zobaczyć? \n base cards \n business cards \n")
+            show(a)
+        elif task1 == "zadzwoń":
+            call()
+        elif task1 == "długość":
+            length()  
+        elif task1 == "zamknij":
+            print("Narazie")
+            break
+        else:
+            print("Nie ma takiego polecenia. Sprawdz za pomocą komendy 'pomoc' co możesz zrobić")
         
 #Uruchomienie programu
 if __name__ == "__main__":
     print("Witam w moim programie! Chcesz się dowiedzieć co potrafię? Wpisz 'pomoc', aby dowiedzieć się więcej")
-    while True:
-        task()
-
+    task()
